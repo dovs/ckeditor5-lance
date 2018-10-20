@@ -42,10 +42,10 @@ describe( 'LinkEditing', () => {
 	} );
 
 	it( 'should set proper schema rules', () => {
-		expect( model.schema.checkAttribute( [ '$block', '$text' ], 'linkHref' ) ).to.be.true;
-		expect( model.schema.checkAttribute( [ '$clipboardHolder', '$text' ], 'linkHref' ) ).to.be.true;
+		expect( model.schema.checkAttribute( [ '$block', '$text' ], 'lanceComment' ) ).to.be.true;
+		expect( model.schema.checkAttribute( [ '$clipboardHolder', '$text' ], 'lanceComment' ) ).to.be.true;
 
-		expect( model.schema.checkAttribute( [ '$block' ], 'linkHref' ) ).to.be.false;
+		expect( model.schema.checkAttribute( [ '$block' ], 'lanceComment' ) ).to.be.false;
 	} );
 
 	it( 'should bind two-step caret movement to `linkHref` attribute', () => {
@@ -181,7 +181,7 @@ describe( 'LinkEditing', () => {
 				'<paragraph>foo <$text linkHref="url">b{}ar</$text> baz</paragraph>'
 			);
 
-			expect( model.document.selection.hasAttribute( 'linkHref' ) ).to.be.true;
+			expect( model.document.selection.hasAttribute( 'lanceComment' ) ).to.be.true;
 			expect( getViewData( view ) ).to.equal(
 				'<p>foo <a class="ck-link_selected" href="url">b{}ar</a> baz</p>'
 			);
@@ -192,13 +192,13 @@ describe( 'LinkEditing', () => {
 				'<paragraph>foo {}<$text linkHref="url">bar</$text> baz</paragraph>'
 			);
 
-			expect( model.document.selection.hasAttribute( 'linkHref' ) ).to.be.false;
+			expect( model.document.selection.hasAttribute( 'lanceComment' ) ).to.be.false;
 
 			model.change( writer => {
-				writer.setSelectionAttribute( 'linkHref', 'url' );
+				writer.setSelectionAttribute( 'lanceComment', 'url' );
 			} );
 
-			expect( model.document.selection.hasAttribute( 'linkHref' ) ).to.be.true;
+			expect( model.document.selection.hasAttribute( 'lanceComment' ) ).to.be.true;
 			expect( getViewData( view ) ).to.equal(
 				'<p>foo <a class="ck-link_selected" href="url">{}bar</a> baz</p>'
 			);
@@ -209,7 +209,7 @@ describe( 'LinkEditing', () => {
 				'<paragraph>foo <$text linkHref="url">bar</$text>{} baz</paragraph>'
 			);
 
-			expect( model.document.selection.hasAttribute( 'linkHref' ) ).to.be.true;
+			expect( model.document.selection.hasAttribute( 'lanceComment' ) ).to.be.true;
 			expect( getViewData( view ) ).to.equal(
 				'<p>foo <a class="ck-link_selected" href="url">bar{}</a> baz</p>'
 			);
@@ -227,7 +227,7 @@ describe( 'LinkEditing', () => {
 				'<paragraph><$text linkHref="url">[]nk</$text> baz</paragraph>'
 			);
 
-			expect( model.document.selection.hasAttribute( 'linkHref' ) ).to.be.true;
+			expect( model.document.selection.hasAttribute( 'lanceComment' ) ).to.be.true;
 		} );
 
 		it( 'should remove classes when selection is moved out from the link', () => {
@@ -300,7 +300,7 @@ describe( 'LinkEditing', () => {
 				);
 
 				model.change( writer => {
-					writer.setAttribute( 'linkHref', 'new-url', new ModelRange(
+					writer.setAttribute( 'lanceComment', 'new-url', new ModelRange(
 						model.document.selection.getFirstPosition().getShiftedBy( -1 ),
 						model.document.selection.getFirstPosition().getShiftedBy( 1 ) )
 					);

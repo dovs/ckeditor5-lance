@@ -9,17 +9,17 @@
 
 import Command from '@ckeditor/ckeditor5-core/src/command';
 import Range from '@ckeditor/ckeditor5-engine/src/model/range';
-import findLinkRange from './findlinkrange';
+import findCommentRange from './findcommentrange';
 import toMap from '@ckeditor/ckeditor5-utils/src/tomap';
 
 /**
- * The link command. It is used by the {@link module:link/link~Link link feature}.
+ * The lance command. It is used by the {@link module:lance/lance~Lance lance feature}.
  *
  * @extends module:core/command~Command
  */
-export default class LinkCommand extends Command {
+export default class LanceCommand extends Command {
 	/**
-	 * The value of the `'linkHref'` attribute if the start of the selection is located in a node with this attribute.
+	 * The value of the `'lanceComment'` attribute if the start of the selection is located in a node with this attribute.
 	 *
 	 * @observable
 	 * @readonly
@@ -33,8 +33,8 @@ export default class LinkCommand extends Command {
 		const model = this.editor.model;
 		const doc = model.document;
 
-		this.value = doc.selection.getAttribute( 'linkHref' );
-		this.isEnabled = model.schema.checkAttributeInSelection( doc.selection, 'linkHref' );
+		this.value = doc.selection.getAttribute( 'lanceComment' );
+		this.isEnabled = model.schema.checkAttributeInSelection( doc.selection, 'lanceComment' );
 	}
 
 	/**
@@ -63,11 +63,11 @@ export default class LinkCommand extends Command {
 				const position = selection.getFirstPosition();
 
 				// When selection is inside text with `linkHref` attribute.
-				if ( selection.hasAttribute( 'linkHref' ) ) {
+				if ( selection.hasAttribute( 'lanceComment' ) ) {
 					// Then update `linkHref` value.
-					const linkRange = findLinkRange( selection.getFirstPosition(), selection.getAttribute( 'linkHref' ) );
+					const linkRange = findCommentRange( selection.getFirstPosition(), selection.getAttribute( 'lanceComment' ) );
 
-					writer.setAttribute( 'linkHref', href, linkRange );
+					writer.setAttribute( 'lanceComment', href, linkRange );
 
 					// Create new range wrapping changed link.
 					writer.setSelection( linkRange );
@@ -78,7 +78,7 @@ export default class LinkCommand extends Command {
 				else if ( href !== '' ) {
 					const attributes = toMap( selection.getAttributes() );
 
-					attributes.set( 'linkHref', href );
+					attributes.set( 'lanceComment', href );
 
 					const node = writer.createText( href, attributes );
 
@@ -90,10 +90,10 @@ export default class LinkCommand extends Command {
 			} else {
 				// If selection has non-collapsed ranges, we change attribute on nodes inside those ranges
 				// omitting nodes where `linkHref` attribute is disallowed.
-				const ranges = model.schema.getValidRanges( selection.getRanges(), 'linkHref' );
+				const ranges = model.schema.getValidRanges( selection.getRanges(), 'lanceComment' );
 
 				for ( const range of ranges ) {
-					writer.setAttribute( 'linkHref', href, range );
+					writer.setAttribute( 'lanceComment', href, range );
 				}
 			}
 		} );

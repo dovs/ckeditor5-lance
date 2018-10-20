@@ -9,7 +9,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic/src/ckeditor';
 import { CS_CONFIG } from '@ckeditor/ckeditor5-cloud-services/tests/_utils/cloud-services-config';
 
 ClassicEditor
-	.create( document.querySelector( '#snippet-link' ), {
+	.create( document.querySelector( '#snippet-lance' ), {
 		cloudServices: CS_CONFIG,
 		toolbar: {
 			items: [
@@ -18,6 +18,7 @@ ClassicEditor
 				'bold',
 				'italic',
 				'link',
+				'lance',
 				'bulletedList',
 				'numberedList',
 				'blockQuote',

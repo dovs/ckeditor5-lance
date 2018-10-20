@@ -4,36 +4,37 @@
  */
 
 /**
- * @module link/utils
+ * @module lance/utils
  */
 
-const linkElementSymbol = Symbol( 'linkElement' );
+const commentElementSymbol = Symbol( 'commentElement' );
 
 const ATTRIBUTE_WHITESPACES = /[\u0000-\u0020\u00A0\u1680\u180E\u2000-\u2029\u205f\u3000]/g; // eslint-disable-line no-control-regex
 const SAFE_URL = /^(?:(?:https?|ftps?|mailto):|[^a-z]|[a-z+.-]+(?:[^a-z+.:-]|$))/i;
 
 /**
- * Returns `true` if a given view node is the link element.
+ * Returns `true` if a given view node is the comment element.
  *
  * @param {module:engine/view/node~Node} node
  * @returns {Boolean}
  */
-export function isLinkElement( node ) {
-	return node.is( 'attributeElement' ) && !!node.getCustomProperty( linkElementSymbol );
+export function isCommentElement( node ) {
+	return node.is( 'attributeElement' ) && !!node.getCustomProperty( commentElementSymbol );
 }
 
 /**
- * Creates link {@link module:engine/view/attributeelement~AttributeElement} with provided `href` attribute.
+ * Creates comment {@link module:engine/view/attributeelement~AttributeElement} with provided `href` attribute.
  *
  * @param {String} href
  * @returns {module:engine/view/attributeelement~AttributeElement}
  */
-export function createLinkElement( href, writer ) {
+export function createCommentElement( href, writer ) {
+	// TODO:[dvs] ...
 	// Priority 5 - https://github.com/ckeditor/ckeditor5-link/issues/121.
-	const linkElement = writer.createAttributeElement( 'a', { href }, { priority: 5 } );
-	writer.setCustomProperty( linkElementSymbol, true, linkElement );
+	const commentElement = writer.createAttributeElement( 'a', { href }, { priority: 5 } );
+	writer.setCustomProperty( commentElementSymbol, true, commentElement );
 
-	return linkElement;
+	return commentElement;
 }
 
 /**

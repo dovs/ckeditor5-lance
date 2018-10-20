@@ -4,15 +4,15 @@
  */
 
 /**
- * @module link/findlinkrange
+ * @module lance/findcommentrange
  */
 
 import Range from '@ckeditor/ckeditor5-engine/src/model/range';
 import Position from '@ckeditor/ckeditor5-engine/src/model/position';
 
 /**
- * Returns a range containing the entire link in which the given `position` is placed.
- *
+ * Returns a range containing the entire range in which the given `position` is placed.
+ * // TODO:[dvs] ...
  * It can be used e.g. to get the entire range on which the `linkHref` attribute needs to be changed when having a
  * selection inside a link.
  *
@@ -20,7 +20,7 @@ import Position from '@ckeditor/ckeditor5-engine/src/model/position';
  * @param {String} value The `linkHref` attribute value.
  * @returns {module:engine/model/range~Range} The link range.
  */
-export default function findLinkRange( position, value ) {
+export default function findCommentRange( position, value ) {
 	return new Range( _findBound( position, value, true ), _findBound( position, value, false ) );
 }
 
@@ -38,7 +38,7 @@ function _findBound( position, value, lookBack ) {
 
 	let lastNode = null;
 
-	while ( node && node.getAttribute( 'linkHref' ) == value ) {
+	while ( node && node.getAttribute( 'lanceComment' ) == value ) {
 		lastNode = node;
 		node = lookBack ? node.previousSibling : node.nextSibling;
 	}

@@ -1,7 +1,9 @@
 ---
-title: Link
+title: Lance
 category: features
 ---
+
+TBD: all of the below...
 
 The {@link module:link/link~Link} feature brings support for link editing to the editor. It allows for inserting hyperlinks into the edited content and offers the UI to create and edit them.
 

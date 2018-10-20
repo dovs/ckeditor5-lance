@@ -19,7 +19,7 @@ describe( 'LinkCommand', () => {
 
 				model.schema.extend( '$text', {
 					allowIn: '$root',
-					allowAttributes: 'linkHref'
+					allowAttributes: 'lanceComment'
 				} );
 
 				model.schema.register( 'p', { inheritAllFrom: '$block' } );
@@ -38,7 +38,7 @@ describe( 'LinkCommand', () => {
 			model.schema.register( 'x', { inheritAllFrom: '$block' } );
 
 			model.schema.addAttributeCheck( ( ctx, attributeName ) => {
-				if ( ctx.endsWith( 'x $text' ) && attributeName == 'linkHref' ) {
+				if ( ctx.endsWith( 'x $text' ) && attributeName == 'lanceComment' ) {
 					return false;
 				}
 			} );
@@ -238,7 +238,7 @@ describe( 'LinkCommand', () => {
 
 			it( 'should not insert text with `linkHref` attribute when is not allowed in parent', () => {
 				model.schema.addAttributeCheck( ( ctx, attributeName ) => {
-					if ( ctx.endsWith( 'p $text' ) && attributeName == 'linkHref' ) {
+					if ( ctx.endsWith( 'p $text' ) && attributeName == 'lanceComment' ) {
 						return false;
 					}
 				} );

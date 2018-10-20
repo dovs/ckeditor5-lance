@@ -23,7 +23,7 @@ describe( 'UnlinkCommand', () => {
 
 				model.schema.extend( '$text', {
 					allowIn: '$root',
-					allowAttributes: 'linkHref'
+					allowAttributes: 'lanceComment'
 				} );
 
 				model.schema.register( 'p', { inheritAllFrom: '$block' } );
@@ -37,7 +37,7 @@ describe( 'UnlinkCommand', () => {
 	describe( 'isEnabled', () => {
 		it( 'should be true when selection has `linkHref` attribute', () => {
 			model.change( writer => {
-				writer.setSelectionAttribute( 'linkHref', 'value' );
+				writer.setSelectionAttribute( 'lanceComment', 'value' );
 			} );
 
 			expect( command.isEnabled ).to.true;
@@ -45,7 +45,7 @@ describe( 'UnlinkCommand', () => {
 
 		it( 'should be false when selection doesn\'t have `linkHref` attribute', () => {
 			model.change( writer => {
-				writer.removeSelectionAttribute( 'linkHref' );
+				writer.removeSelectionAttribute( 'lanceComment' );
 			} );
 
 			expect( command.isEnabled ).to.false;
@@ -98,7 +98,7 @@ describe( 'UnlinkCommand', () => {
 
 				command.execute();
 
-				expect( document.selection.hasAttribute( 'linkHref' ) ).to.false;
+				expect( document.selection.hasAttribute( 'lanceComment' ) ).to.false;
 			} );
 		} );
 
@@ -223,7 +223,7 @@ describe( 'UnlinkCommand', () => {
 
 				command.execute();
 
-				expect( document.selection.hasAttribute( 'linkHref' ) ).to.false;
+				expect( document.selection.hasAttribute( 'lanceComment' ) ).to.false;
 			} );
 		} );
 	} );

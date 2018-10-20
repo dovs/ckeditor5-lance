@@ -4,7 +4,7 @@
  */
 
 /**
- * @module link/ui/linkactionsview
+ * @module lance/ui/lanceactionsview
  */
 
 import View from '@ckeditor/ckeditor5-ui/src/view';
@@ -18,17 +18,17 @@ import KeystrokeHandler from '@ckeditor/ckeditor5-utils/src/keystrokehandler';
 
 import { ensureSafeUrl } from '../utils';
 
-import unlinkIcon from '../../theme/icons/unlink.svg';
+import unlanceIcon from '../../theme/icons/unlance.svg';
 import pencilIcon from '@ckeditor/ckeditor5-core/theme/icons/pencil.svg';
-import '../../theme/linkactions.css';
+import '../../theme/lanceactions.css';
 
 /**
- * The link actions view class. This view displays link preview, allows
- * unlinking or editing the link.
+ * The lance actions view class. This view displays lance preview, allows
+ * uncommenting or editing the comment.
  *
  * @extends module:ui/view~View
  */
-export default class LinkActionsView extends View {
+export default class LanceActionsView extends View {
 	/**
 	 * @inheritDoc
 	 */
@@ -65,14 +65,14 @@ export default class LinkActionsView extends View {
 		 *
 		 * @member {module:ui/button/buttonview~ButtonView}
 		 */
-		this.unlinkButtonView = this._createButton( t( 'Unlink' ), unlinkIcon, 'unlink' );
+		this.unlanceButtonView = this._createButton( t( 'Remove comment' ), unlanceIcon, 'unlance' );
 
 		/**
 		 * The edit link button view.
 		 *
 		 * @member {module:ui/button/buttonview~ButtonView}
 		 */
-		this.editButtonView = this._createButton( t( 'Edit link' ), pencilIcon, 'edit' );
+		this.editButtonView = this._createButton( t( 'Edit comment' ), pencilIcon, 'edit' );
 
 		/**
 		 * Value of the "href" attribute of the link to use in the {@link #previewButtonView}.
@@ -117,7 +117,7 @@ export default class LinkActionsView extends View {
 			attributes: {
 				class: [
 					'ck',
-					'ck-link-actions',
+					'ck-lance-actions',
 				],
 
 				// https://github.com/ckeditor/ckeditor5-link/issues/90
@@ -127,7 +127,7 @@ export default class LinkActionsView extends View {
 			children: [
 				this.previewButtonView,
 				this.editButtonView,
-				this.unlinkButtonView
+				this.unlanceButtonView
 			]
 		} );
 	}
@@ -141,7 +141,7 @@ export default class LinkActionsView extends View {
 		const childViews = [
 			this.previewButtonView,
 			this.editButtonView,
-			this.unlinkButtonView
+			this.unlanceButtonView
 		];
 
 		childViews.forEach( v => {
@@ -187,7 +187,7 @@ export default class LinkActionsView extends View {
 	}
 
 	/**
-	 * Creates a link href preview button.
+	 * Creates a lance preview button.
 	 *
 	 * @private
 	 * @returns {module:ui/button/buttonview~ButtonView} The button view instance.
@@ -199,21 +199,21 @@ export default class LinkActionsView extends View {
 
 		button.set( {
 			withText: true,
-			tooltip: t( 'Open link in new tab' )
+			tooltip: t( 'Open comment in new tab' ) // TODO:[dvs] ???
 		} );
 
 		button.extendTemplate( {
 			attributes: {
 				class: [
 					'ck',
-					'ck-link-actions__preview'
+					'ck-lance-actions__preview'
 				],
 				href: bind.to( 'href', href => href && ensureSafeUrl( href ) ),
 				target: '_blank'
 			}
 		} );
 
-		button.bind( 'label' ).to( this, 'href', href => {
+		button.bind( 'label' ).to( this, 'href', href => { // TODO:[dvs] ...
 			return href || t( 'This link has no URL' );
 		} );
 

@@ -4,7 +4,7 @@
  */
 
 /**
- * @module link/ui/linkformview
+ * @module lance/ui/lanceformview
  */
 
 import View from '@ckeditor/ckeditor5-ui/src/view';
@@ -21,16 +21,16 @@ import KeystrokeHandler from '@ckeditor/ckeditor5-utils/src/keystrokehandler';
 
 import checkIcon from '@ckeditor/ckeditor5-core/theme/icons/check.svg';
 import cancelIcon from '@ckeditor/ckeditor5-core/theme/icons/cancel.svg';
-import '../../theme/linkform.css';
+import '../../theme/lanceform.css';
 
 /**
- * The link form view controller class.
+ * The lance form view controller class.
  *
- * See {@link module:link/ui/linkformview~LinkFormView}.
+ * See {@link module:lance/ui/lanceformview~LanceFormView}.
  *
  * @extends module:ui/view~View
  */
-export default class LinkFormView extends View {
+export default class LanceFormView extends View {
 	/**
 	 * @inheritDoc
 	 */
@@ -112,7 +112,7 @@ export default class LinkFormView extends View {
 			attributes: {
 				class: [
 					'ck',
-					'ck-link-form',
+					'ck-lance-form',
 				],
 
 				// https://github.com/ckeditor/ckeditor5-link/issues/90
@@ -173,8 +173,8 @@ export default class LinkFormView extends View {
 
 		const labeledInput = new LabeledInputView( this.locale, InputTextView );
 
-		labeledInput.label = t( 'Link URL' );
-		labeledInput.inputView.placeholder = 'https://example.com';
+		labeledInput.label = t( 'Enter Comment' );
+		labeledInput.inputView.placeholder = 'Your comment here';
 
 		return labeledInput;
 	}

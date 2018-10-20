@@ -12,17 +12,17 @@ import {
 	downcastAttributeToElement
 } from '@ckeditor/ckeditor5-engine/src/conversion/downcast-converters';
 import { upcastElementToAttribute } from '@ckeditor/ckeditor5-engine/src/conversion/upcast-converters';
-import LinkCommand from './linkcommand';
-import UnlinkCommand from './unlinkcommand';
-import { createLinkElement, ensureSafeUrl } from './utils';
+import LanceCommand from './lancecommand';
+import UnlanceCommand from './unlancecommand';
+import { createCommentElement, ensureSafeUrl } from './utils';
 import bindTwoStepCaretToAttribute from '@ckeditor/ckeditor5-engine/src/utils/bindtwostepcarettoattribute';
-import findLinkRange from './findlinkrange';
-import '../theme/link.css';
+import findCommentRange from './findcommentrange';
+import '../theme/lance.css';
 
 const HIGHLIGHT_CLASS = 'ck-link_selected';
 
 /**
- * The link engine feature.
+ * The lance engine feature.
  *
  * It introduces the `linkHref="url"` attribute in the model which renders to the view as a `<a href="url">` element
  * as well as `'link'` and `'unlink'` commands.
@@ -37,14 +37,14 @@ export default class LinkEditing extends Plugin {
 		const editor = this.editor;
 
 		// Allow link attribute on all inline nodes.
-		editor.model.schema.extend( '$text', { allowAttributes: 'linkHref' } );
+		editor.model.schema.extend( '$text', { allowAttributes: 'lanceComment' } );
 
 		editor.conversion.for( 'dataDowncast' )
-			.add( downcastAttributeToElement( { model: 'linkHref', view: createLinkElement } ) );
+			.add( downcastAttributeToElement( { model: 'lanceComment', view: createCommentElement } ) );
 
 		editor.conversion.for( 'editingDowncast' )
-			.add( downcastAttributeToElement( { model: 'linkHref', view: ( href, writer ) => {
-				return createLinkElement( ensureSafeUrl( href ), writer );
+			.add( downcastAttributeToElement( { model: 'lanceComment', view: ( href, writer ) => {
+				return createCommentElement( ensureSafeUrl( href ), writer );
 			} } ) );
 
 		editor.conversion.for( 'upcast' )
@@ -56,17 +56,17 @@ export default class LinkEditing extends Plugin {
 					}
 				},
 				model: {
-					key: 'linkHref',
+					key: 'lanceComment',
 					value: viewElement => viewElement.getAttribute( 'href' )
 				}
 			} ) );
 
 		// Create linking commands.
-		editor.commands.add( 'link', new LinkCommand( editor ) );
-		editor.commands.add( 'unlink', new UnlinkCommand( editor ) );
+		editor.commands.add( 'lance', new LanceCommand( editor ) );
+		editor.commands.add( 'unlance', new UnlanceCommand( editor ) );
 
 		// Enable two-step caret movement for `linkHref` attribute.
-		bindTwoStepCaretToAttribute( editor.editing.view, editor.model, this, 'linkHref' );
+		bindTwoStepCaretToAttribute( editor.editing.view, editor.model, this, 'lanceComment' );
 
 		// Setup highlight over selected link.
 		this._setupLinkHighlight();
@@ -95,8 +95,8 @@ export default class LinkEditing extends Plugin {
 		view.document.registerPostFixer( writer => {
 			const selection = editor.model.document.selection;
 
-			if ( selection.hasAttribute( 'linkHref' ) ) {
-				const modelRange = findLinkRange( selection.getFirstPosition(), selection.getAttribute( 'linkHref' ) );
+			if ( selection.hasAttribute( 'lanceComment' ) ) {
+				const modelRange = findCommentRange( selection.getFirstPosition(), selection.getAttribute( 'lanceComment' ) );
 				const viewRange = editor.editing.mapper.toViewRange( modelRange );
 
 				// There might be multiple `a` elements in the `viewRange`, for example, when the `a` element is

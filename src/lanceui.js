@@ -4,34 +4,34 @@
  */
 
 /**
- * @module link/linkui
+ * @module lance/lanceui
  */
 
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import ClickObserver from '@ckeditor/ckeditor5-engine/src/view/observer/clickobserver';
 import Range from '@ckeditor/ckeditor5-engine/src/view/range';
-import { isLinkElement } from './utils';
+import { isCommentElement } from './utils';
 import ContextualBalloon from '@ckeditor/ckeditor5-ui/src/panel/balloon/contextualballoon';
 
 import clickOutsideHandler from '@ckeditor/ckeditor5-ui/src/bindings/clickoutsidehandler';
 
 import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
-import LinkFormView from './ui/linkformview';
-import LinkActionsView from './ui/linkactionsview';
+import LanceFormView from './ui/lanceformview';
+import LanceActionsView from './ui/lanceactionsview';
 
-import linkIcon from '../theme/icons/link.svg';
+import lanceIcon from '../theme/icons/lance.svg';
 
-const linkKeystroke = 'Ctrl+K';
+const lanceKeystroke = 'Ctrl+L';
 
 /**
- * The link UI plugin. It introduces the `'link'` and `'unlink'` buttons and support for the <kbd>Ctrl+K</kbd> keystroke.
+ * The lance UI plugin. It introduces the `'lance'` and `'unlance'` buttons and support for the <kbd>Ctrl+L</kbd> keystroke.
  *
  * It uses the
  * {@link module:ui/panel/balloon/contextualballoon~ContextualBalloon contextual balloon plugin}.
  *
  * @extends module:core/plugin~Plugin
  */
-export default class LinkUI extends Plugin {
+export default class LanceUI extends Plugin {
 	/**
 	 * @inheritDoc
 	 */
@@ -50,14 +50,14 @@ export default class LinkUI extends Plugin {
 		/**
 		 * The actions view displayed inside of the balloon.
 		 *
-		 * @member {module:link/ui/linkactionsview~LinkActionsView}
+		 * @member {module:lance/ui/lanceactionsview~LanceActionsView}
 		 */
 		this.actionsView = this._createActionsView();
 
 		/**
 		 * The form view displayed inside the balloon.
 		 *
-		 * @member {module:link/ui/linkformview~LinkFormView}
+		 * @member {module:lance/ui/lanceformview~LanceFormView}
 		 */
 		this.formView = this._createFormView();
 
@@ -70,36 +70,36 @@ export default class LinkUI extends Plugin {
 		this._balloon = editor.plugins.get( ContextualBalloon );
 
 		// Create toolbar buttons.
-		this._createToolbarLinkButton();
+		this._createToolbarLanceButton();
 
 		// Attach lifecycle actions to the the balloon.
 		this._enableUserBalloonInteractions();
 	}
 
 	/**
-	 * Creates the {@link module:link/ui/linkactionsview~LinkActionsView} instance.
+	 * Creates the {@link module:lance/ui/lanceactionsview~LanceActionsView} instance.
 	 *
 	 * @private
-	 * @returns {module:link/ui/linkactionsview~LinkActionsView} The link actions view instance.
+	 * @returns {module:link/ui/lanceactionsview~LanceActionsView} The lance actions view instance.
 	 */
 	_createActionsView() {
 		const editor = this.editor;
-		const actionsView = new LinkActionsView( editor.locale );
-		const linkCommand = editor.commands.get( 'link' );
-		const unlinkCommand = editor.commands.get( 'unlink' );
+		const actionsView = new LanceActionsView( editor.locale );
+		const lanceCommand = editor.commands.get( 'lance' );
+		const unlanceCommand = editor.commands.get( 'unlance' );
 
-		actionsView.bind( 'href' ).to( linkCommand, 'value' );
-		actionsView.editButtonView.bind( 'isEnabled' ).to( linkCommand );
-		actionsView.unlinkButtonView.bind( 'isEnabled' ).to( unlinkCommand );
+		actionsView.bind( 'href' ).to( lanceCommand, 'value' );
+		actionsView.editButtonView.bind( 'isEnabled' ).to( lanceCommand );
+		actionsView.unlanceButtonView.bind( 'isEnabled' ).to( unlanceCommand );
 
-		// Execute unlink command after clicking on the "Edit" button.
+		// Execute unlance command after clicking on the "Edit" button.
 		this.listenTo( actionsView, 'edit', () => {
 			this._addFormView();
 		} );
 
-		// Execute unlink command after clicking on the "Unlink" button.
-		this.listenTo( actionsView, 'unlink', () => {
-			editor.execute( 'unlink' );
+		// Execute unlance command after clicking on the "Unlance" button.
+		this.listenTo( actionsView, 'unlance', () => {
+			editor.execute( 'unlance' );
 			this._hideUI();
 		} );
 
@@ -109,8 +109,8 @@ export default class LinkUI extends Plugin {
 			cancel();
 		} );
 
-		// Open the form view on Ctrl+K when the **actions have focus**..
-		actionsView.keystrokes.set( linkKeystroke, ( data, cancel ) => {
+		// Open the form view on Ctrl+L when the **actions have focus**..
+		actionsView.keystrokes.set( lanceKeystroke, ( data, cancel ) => {
 			this._addFormView();
 			cancel();
 		} );
@@ -119,25 +119,25 @@ export default class LinkUI extends Plugin {
 	}
 
 	/**
-	 * Creates the {@link module:link/ui/linkformview~LinkFormView} instance.
+	 * Creates the {@link module:lance/ui/lanceformview~LanceFormView} instance.
 	 *
 	 * @private
-	 * @returns {module:link/ui/linkformview~LinkFormView} The link form instance.
+	 * @returns {module:lance/ui/lanceformview~LanceFormView} The lance form instance.
 	 */
 	_createFormView() {
 		const editor = this.editor;
-		const formView = new LinkFormView( editor.locale );
-		const linkCommand = editor.commands.get( 'link' );
+		const formView = new LanceFormView( editor.locale );
+		const lanceCommand = editor.commands.get( 'lance' );
 
-		formView.urlInputView.bind( 'value' ).to( linkCommand, 'value' );
+		formView.urlInputView.bind( 'value' ).to( lanceCommand, 'value' );
 
 		// Form elements should be read-only when corresponding commands are disabled.
-		formView.urlInputView.bind( 'isReadOnly' ).to( linkCommand, 'isEnabled', value => !value );
-		formView.saveButtonView.bind( 'isEnabled' ).to( linkCommand );
+		formView.urlInputView.bind( 'isReadOnly' ).to( lanceCommand, 'isEnabled', value => !value );
+		formView.saveButtonView.bind( 'isEnabled' ).to( lanceCommand );
 
-		// Execute link command after clicking the "Save" button.
+		// Execute lance command after clicking the "Save" button.
 		this.listenTo( formView, 'submit', () => {
-			editor.execute( 'link', formView.urlInputView.inputView.element.value );
+			editor.execute( 'lance', formView.urlInputView.inputView.element.value );
 			this._removeFormView();
 		} );
 
@@ -156,37 +156,38 @@ export default class LinkUI extends Plugin {
 	}
 
 	/**
-	 * Creates a toolbar Link button. Clicking this button will show
+	 * Creates a toolbar Lance button. Clicking this button will show
 	 * a {@link #_balloon} attached to the selection.
 	 *
 	 * @private
 	 */
-	_createToolbarLinkButton() {
+	_createToolbarLanceButton() {
 		const editor = this.editor;
-		const linkCommand = editor.commands.get( 'link' );
+		const lanceCommand = editor.commands.get( 'lance' );
 		const t = editor.t;
 
-		// Handle the `Ctrl+K` keystroke and show the panel.
-		editor.keystrokes.set( linkKeystroke, ( keyEvtData, cancel ) => {
+		// Handle the `Ctrl+L` keystroke and show the panel.
+		editor.keystrokes.set( lanceKeystroke, ( keyEvtData, cancel ) => {
+			// TODO:[dvs] check if needed - probably not?!
 			// Prevent focusing the search bar in FF and opening new tab in Edge. #153, #154.
 			cancel();
 
-			if ( linkCommand.isEnabled ) {
+			if ( lanceCommand.isEnabled ) {
 				this._showUI();
 			}
 		} );
 
-		editor.ui.componentFactory.add( 'link', locale => {
+		editor.ui.componentFactory.add( 'lance', locale => {
 			const button = new ButtonView( locale );
 
 			button.isEnabled = true;
-			button.label = t( 'Link' );
-			button.icon = linkIcon;
-			button.keystroke = linkKeystroke;
+			button.label = t( 'Add Comment' );
+			button.icon = lanceIcon;
+			button.keystroke = lanceKeystroke;
 			button.tooltip = true;
 
 			// Bind button to the command.
-			button.bind( 'isOn', 'isEnabled' ).to( linkCommand, 'value', 'isEnabled' );
+			button.bind( 'isOn', 'isEnabled' ).to( lanceCommand, 'value', 'isEnabled' );
 
 			// Show the panel on button click.
 			this.listenTo( button, 'execute', () => this._showUI() );
@@ -204,12 +205,12 @@ export default class LinkUI extends Plugin {
 	_enableUserBalloonInteractions() {
 		const viewDocument = this.editor.editing.view.document;
 
-		// Handle click on view document and show panel when selection is placed inside the link element.
-		// Keep panel open until selection will be inside the same link element.
+		// Handle click on view document and show panel when selection is placed inside the lance element.
+		// Keep panel open until selection will be inside the same lance element.
 		this.listenTo( viewDocument, 'click', () => {
-			const parentLink = this._getSelectedLinkElement();
+			const parentLance = this._getSelectedCommentElement();
 
-			if ( parentLink ) {
+			if ( parentLance ) {
 				// Then show panel but keep focus inside editor editable.
 				this._showUI();
 			}
@@ -222,6 +223,7 @@ export default class LinkUI extends Plugin {
 				cancel();
 			}
 		}, {
+			// TODO:[dvs] check the following...
 			// Use the high priority because the link UI navigation is more important
 			// than other feature's actions, e.g. list indentation.
 			// https://github.com/ckeditor/ckeditor5-link/issues/146
@@ -272,7 +274,7 @@ export default class LinkUI extends Plugin {
 		}
 
 		const editor = this.editor;
-		const linkCommand = editor.commands.get( 'link' );
+		const lanceCommand = editor.commands.get( 'lance' );
 
 		this._balloon.add( {
 			view: this.formView,
@@ -281,13 +283,14 @@ export default class LinkUI extends Plugin {
 
 		this.formView.urlInputView.select();
 
+		// TODO:[dvs] ...
 		// Make sure that each time the panel shows up, the URL field remains in sync with the value of
 		// the command. If the user typed in the input, then canceled the balloon (`urlInputView#value` stays
 		// unaltered) and re-opened it without changing the value of the link command (e.g. because they
 		// clicked the same link), they would see the old value instead of the actual value of the command.
 		// https://github.com/ckeditor/ckeditor5-link/issues/78
 		// https://github.com/ckeditor/ckeditor5-link/issues/123
-		this.formView.urlInputView.inputView.element.value = linkCommand.value || '';
+		this.formView.urlInputView.inputView.element.value = lanceCommand.value || '';
 	}
 
 	/**
@@ -313,18 +316,18 @@ export default class LinkUI extends Plugin {
 	 */
 	_showUI() {
 		const editor = this.editor;
-		const linkCommand = editor.commands.get( 'link' );
+		const lanceCommand = editor.commands.get( 'lance' );
 
-		if ( !linkCommand.isEnabled ) {
+		if ( !lanceCommand.isEnabled ) {
 			return;
 		}
 
-		// When there's no link under the selection, go straight to the editing UI.
-		if ( !this._getSelectedLinkElement() ) {
+		// When there's no comment under the selection, go straight to the editing UI.
+		if ( !this._getSelectedCommentElement() ) {
 			this._addActionsView();
 			this._addFormView();
 		}
-		// If theres a link under the selection...
+		// If theres a comment under the selection...
 		else {
 			// Go to the editing UI if actions are already visible.
 			if ( this._areActionsVisible ) {
@@ -378,13 +381,14 @@ export default class LinkUI extends Plugin {
 		const editor = this.editor;
 		const viewDocument = editor.editing.view.document;
 
-		let prevSelectedLink = this._getSelectedLinkElement();
+		let prevSelectedComment = this._getSelectedCommentElement();
 		let prevSelectionParent = getSelectionParent();
 
 		this.listenTo( editor.ui, 'update', () => {
-			const selectedLink = this._getSelectedLinkElement();
+			const selectedComment = this._getSelectedCommentElement();
 			const selectionParent = getSelectionParent();
 
+			// TODO:[dvs] ...
 			// Hide the panel if:
 			//
 			// * the selection went out of the EXISTING link element. E.g. user moved the caret out
@@ -395,8 +399,8 @@ export default class LinkUI extends Plugin {
 			//
 			// Note: #_getSelectedLinkElement will return a link for a non-collapsed selection only
 			// when fully selected.
-			if ( ( prevSelectedLink && !selectedLink ) ||
-				( !prevSelectedLink && selectionParent !== prevSelectionParent ) ) {
+			if ( ( prevSelectedComment && !selectedComment ) ||
+				( !prevSelectedComment && selectionParent !== prevSelectionParent ) ) {
 				this._hideUI();
 			}
 			// Update the position of the panel when:
@@ -409,7 +413,7 @@ export default class LinkUI extends Plugin {
 				this._balloon.updatePosition( this._getBalloonPositionData() );
 			}
 
-			prevSelectedLink = selectedLink;
+			prevSelectedComment = selectedComment;
 			prevSelectionParent = selectionParent;
 		} );
 
@@ -480,6 +484,7 @@ export default class LinkUI extends Plugin {
 	}
 
 	/**
+	 * TODO:[dvs] ...
 	 * Returns positioning options for the {@link #_balloon}. They control the way the balloon is attached
 	 * to the target element or selection.
 	 *
@@ -492,11 +497,11 @@ export default class LinkUI extends Plugin {
 	_getBalloonPositionData() {
 		const view = this.editor.editing.view;
 		const viewDocument = view.document;
-		const targetLink = this._getSelectedLinkElement();
+		const targetComment = this._getSelectedCommentElement();
 
-		const target = targetLink ?
-			// When selection is inside link element, then attach panel to this element.
-			view.domConverter.mapViewToDom( targetLink ) :
+		const target = targetComment ?
+			// When selection is inside comment element, then attach panel to this element.
+			view.domConverter.mapViewToDom( targetComment ) :
 			// Otherwise attach panel to the selection.
 			view.domConverter.viewRangeToDom( viewDocument.selection.getFirstRange() );
 
@@ -504,35 +509,36 @@ export default class LinkUI extends Plugin {
 	}
 
 	/**
-	 * Returns the link {@link module:engine/view/attributeelement~AttributeElement} under
+	 * TODO:[dvs] ...
+	 * Returns the comment {@link module:engine/view/attributeelement~AttributeElement} under
 	 * the {@link module:engine/view/document~Document editing view's} selection or `null`
 	 * if there is none.
 	 *
-	 * **Note**: For a non–collapsed selection the link element is only returned when **fully**
+	 * **Note**: For a non–collapsed selection the comment element is only returned when **fully**
 	 * selected and the **only** element within the selection boundaries.
 	 *
 	 * @private
 	 * @returns {module:engine/view/attributeelement~AttributeElement|null}
 	 */
-	_getSelectedLinkElement() {
+	_getSelectedCommentElement() {
 		const selection = this.editor.editing.view.document.selection;
 
 		if ( selection.isCollapsed ) {
-			return findLinkElementAncestor( selection.getFirstPosition() );
+			return findCommentElementAncestor( selection.getFirstPosition() );
 		} else {
 			// The range for fully selected link is usually anchored in adjacent text nodes.
 			// Trim it to get closer to the actual link element.
 			const range = selection.getFirstRange().getTrimmed();
-			const startLink = findLinkElementAncestor( range.start );
-			const endLink = findLinkElementAncestor( range.end );
+			const startComment = findCommentElementAncestor( range.start );
+			const endComment = findCommentElementAncestor( range.end );
 
-			if ( !startLink || startLink != endLink ) {
+			if ( !startComment || startComment != endComment ) {
 				return null;
 			}
 
-			// Check if the link element is fully selected.
-			if ( Range.createIn( startLink ).getTrimmed().isEqual( range ) ) {
-				return startLink;
+			// Check if the comment element is fully selected.
+			if ( Range.createIn( startComment ).getTrimmed().isEqual( range ) ) {
+				return startComment;
 			} else {
 				return null;
 			}
@@ -540,11 +546,11 @@ export default class LinkUI extends Plugin {
 	}
 }
 
-// Returns a link element if there's one among the ancestors of the provided `Position`.
+// Returns a comment element if there's one among the ancestors of the provided `Position`.
 //
 // @private
 // @param {module:engine/view/position~Position} View position to analyze.
-// @returns {module:engine/view/attributeelement~AttributeElement|null} Link element at the position or null.
-function findLinkElementAncestor( position ) {
-	return position.getAncestors().find( ancestor => isLinkElement( ancestor ) );
+// @returns {module:engine/view/attributeelement~AttributeElement|null} Comment element at the position or null.
+function findCommentElementAncestor( position ) {
+	return position.getAncestors().find( ancestor => isCommentElement( ancestor ) );
 }
